@@ -61,19 +61,19 @@ const main = async () => {
 
   // Log configuration summary
   summary.addHeading("Configuration Summary");
-  summary.addRaw(`- Owner: ${owner}`);
-  summary.addRaw(`- Repo: ${repo}`);
-  summary.addRaw(`- Issue Number: ${issueNumber}`);
-  summary.addRaw(`- Issue State Filter: ${issueStateFilter}`);
-  summary.addRaw(`- Time Filter: ${timeFilter || "None"}`);
+  summary.addRaw(`- Owner: ${owner}\n`);
+  summary.addRaw(`- Repo: ${repo}\n`);
+  summary.addRaw(`- Issue Number: ${issueNumber}\n`);
+  summary.addRaw(`- Issue State Filter: ${issueStateFilter}\n`);
+  summary.addRaw(`- Time Filter: ${timeFilter || "None"}\n`);
   summary.addRaw(
-    `- Labels to Add: ${labels.length > 0 ? labels.join(", ") : "None"}`,
+    `- Labels to Add: ${labels.length > 0 ? labels.join(", ") : "None"}\n`,
   );
-  summary.addRaw(`- AI Endpoint: ${endpoint}`);
-  summary.addRaw(`- AI Model: ${modelName}`);
-  summary.addRaw(`- Max Tokens: ${maxTokens}`);
-  summary.addRaw(`- Batch Size: ${batchSize}`);
-  summary.addRaw(`- Post Comment: ${postComment}`);
+  summary.addRaw(`- AI Endpoint: ${endpoint}\n`);
+  summary.addRaw(`- AI Model: ${modelName}\n`);
+  summary.addRaw(`- Max Tokens: ${maxTokens}\n`);
+  summary.addRaw(`- Batch Size: ${batchSize}\n`);
+  summary.addRaw(`- Post Comment: ${postComment}\n`);
 
   // -------- Fetch Issues for Comparison ----------------------------------------
   summary.addHeading("Issues for Comparison Stats");
@@ -89,11 +89,11 @@ const main = async () => {
   });
 
   console.log(`Issues fetch complete.`);
-  summary.addRaw(`- Issues Found: ${issuesToCompare.length}`);
+  summary.addRaw(`- Issues Found: ${issuesToCompare.length}\n`);
 
   if (issuesToCompare.length === 0) {
     console.log("No issues found to compare.");
-    summary.addRaw(`- No issues found for comparison.`);
+    summary.addRaw(`- No issues found for comparison.\n`);
     summary.write();
     return;
   }
@@ -111,7 +111,7 @@ const main = async () => {
   console.log(
     `Processing ${batches.length} batch(es) of candidate issues (batch size = ${batchSize}).`,
   );
-  summary.addRaw(`- Total Batches: ${batches.length}`);
+  summary.addRaw(`- Total Batches: ${batches.length}\n`);
 
   const aiOutputs: string[] = [];
 
@@ -142,10 +142,10 @@ const main = async () => {
     if (aiResponse) {
       aiOutputs.push(aiResponse);
       console.log(`AI response (batch ${i + 1}):`, aiResponse.slice(0, 200));
-      summary.addRaw(`- Batch ${i + 1}: AI response received`);
+      summary.addRaw(`- Batch ${i + 1}: AI response received\n`);
     } else {
       console.log(`No AI response for batch ${i + 1}.`);
-      summary.addRaw(`- Batch ${i + 1}: No AI response`);
+      summary.addRaw(`- Batch ${i + 1}: No AI response\n`);
     }
   }
 
@@ -166,14 +166,14 @@ const main = async () => {
           parsed,
         );
         summary.addRaw(
-          `- AI Output did not pass requested format check logs for details.`,
+          `- AI Output did not pass requested format check logs for details.\n`,
         );
         continue;
       }
     } catch (error) {
       console.error("Error parsing AI Output:", error);
       summary.addRaw(
-        `- Error parsing AI response: ${error instanceof Error ? error.message : "Unknown error"}`,
+        `- Error parsing AI response: ${error instanceof Error ? error.message : "Unknown error"}\n`,
       );
       continue;
     }
@@ -181,12 +181,12 @@ const main = async () => {
 
   console.log(`Total parsed similar issues from AI: ${parsedOutputs.length}`);
   summary.addRaw(
-    `- Total Parsed Similar Issues from AI: ${parsedOutputs.length}`,
+    `- Total Parsed Similar Issues from AI: ${parsedOutputs.length}\n`,
   );
 
   if (parsedOutputs.length === 0) {
     console.log("No similar issues identified by AI.");
-    summary.addRaw(`- No similar issues identified by AI.`);
+    summary.addRaw(`- No similar issues identified by AI.\n`);
     summary.write();
     return;
   }
@@ -218,9 +218,9 @@ const main = async () => {
       body: commentBody,
     });
     if (commentSuccess) {
-      summary.addRaw(`- Comment posted successfully.`);
+      summary.addRaw(`- Comment posted successfully.\n`);
     } else {
-      summary.addRaw(`- Failed to post comment.`);
+      summary.addRaw(`- Failed to post comment.\n`);
     }
   }
 
@@ -233,13 +233,13 @@ const main = async () => {
       labels,
     });
     if (addLabelsSuccess) {
-      summary.addRaw(`- Labels added: ${labels.join(", ")}`);
+      summary.addRaw(`- Labels added: ${labels.join(", ")}\n`);
     } else {
-      summary.addRaw(`- Failed to add labels: ${labels.join(", ")}`);
+      summary.addRaw(`- Failed to add labels: ${labels.join(", ")}\n`);
     }
   }
   console.log("Action completed successfully.");
-  summary.addRaw(`- Action completed successfully.`);
+  summary.addRaw(`- Action completed successfully.\n`);
   summary.write();
   return;
 };

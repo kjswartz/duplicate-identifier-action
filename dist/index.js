@@ -28546,17 +28546,28 @@ var main = async () => {
   const labelsInput = import_core.getInput("labels");
   const labels = labelsInput ? labelsInput.split(",").map((label) => label.trim()) : [];
   import_core.summary.addHeading("Configuration Summary");
-  import_core.summary.addRaw(`- Owner: ${owner}`);
-  import_core.summary.addRaw(`- Repo: ${repo}`);
-  import_core.summary.addRaw(`- Issue Number: ${issueNumber}`);
-  import_core.summary.addRaw(`- Issue State Filter: ${issueStateFilter}`);
-  import_core.summary.addRaw(`- Time Filter: ${timeFilter || "None"}`);
-  import_core.summary.addRaw(`- Labels to Add: ${labels.length > 0 ? labels.join(", ") : "None"}`);
-  import_core.summary.addRaw(`- AI Endpoint: ${endpoint}`);
-  import_core.summary.addRaw(`- AI Model: ${modelName}`);
-  import_core.summary.addRaw(`- Max Tokens: ${maxTokens}`);
-  import_core.summary.addRaw(`- Batch Size: ${batchSize}`);
-  import_core.summary.addRaw(`- Post Comment: ${postComment}`);
+  import_core.summary.addRaw(`- Owner: ${owner}
+`);
+  import_core.summary.addRaw(`- Repo: ${repo}
+`);
+  import_core.summary.addRaw(`- Issue Number: ${issueNumber}
+`);
+  import_core.summary.addRaw(`- Issue State Filter: ${issueStateFilter}
+`);
+  import_core.summary.addRaw(`- Time Filter: ${timeFilter || "None"}
+`);
+  import_core.summary.addRaw(`- Labels to Add: ${labels.length > 0 ? labels.join(", ") : "None"}
+`);
+  import_core.summary.addRaw(`- AI Endpoint: ${endpoint}
+`);
+  import_core.summary.addRaw(`- AI Model: ${modelName}
+`);
+  import_core.summary.addRaw(`- Max Tokens: ${maxTokens}
+`);
+  import_core.summary.addRaw(`- Batch Size: ${batchSize}
+`);
+  import_core.summary.addRaw(`- Post Comment: ${postComment}
+`);
   import_core.summary.addHeading("Issues for Comparison Stats");
   console.log(`Fetching issues...`);
   const issuesToCompare = await getIssuesToCompare({
@@ -28568,10 +28579,12 @@ var main = async () => {
     timeFilter
   });
   console.log(`Issues fetch complete.`);
-  import_core.summary.addRaw(`- Issues Found: ${issuesToCompare.length}`);
+  import_core.summary.addRaw(`- Issues Found: ${issuesToCompare.length}
+`);
   if (issuesToCompare.length === 0) {
     console.log("No issues found to compare.");
-    import_core.summary.addRaw(`- No issues found for comparison.`);
+    import_core.summary.addRaw(`- No issues found for comparison.
+`);
     import_core.summary.write();
     return;
   }
@@ -28579,7 +28592,8 @@ var main = async () => {
   const currentIssueSummary = buildCurrentIssueSummary(issueNumber, issueTitle, issueBody);
   const batches = chunk(issuesToCompare, batchSize);
   console.log(`Processing ${batches.length} batch(es) of candidate issues (batch size = ${batchSize}).`);
-  import_core.summary.addRaw(`- Total Batches: ${batches.length}`);
+  import_core.summary.addRaw(`- Total Batches: ${batches.length}
+`);
   const aiOutputs = [];
   for (let i = 0;i < batches.length; i++) {
     const batch = batches[i];
@@ -28597,10 +28611,12 @@ var main = async () => {
     if (aiResponse) {
       aiOutputs.push(aiResponse);
       console.log(`AI response (batch ${i + 1}):`, aiResponse.slice(0, 200));
-      import_core.summary.addRaw(`- Batch ${i + 1}: AI response received`);
+      import_core.summary.addRaw(`- Batch ${i + 1}: AI response received
+`);
     } else {
       console.log(`No AI response for batch ${i + 1}.`);
-      import_core.summary.addRaw(`- Batch ${i + 1}: No AI response`);
+      import_core.summary.addRaw(`- Batch ${i + 1}: No AI response
+`);
     }
   }
   import_core.summary.addHeading("Parse & Process AI Responses");
@@ -28613,20 +28629,24 @@ var main = async () => {
         parsedOutputs = parsed?.length ? parsedOutputs.concat(parsed) : parsedOutputs;
       } else {
         console.warn("AI Output did not pass requested formatted response:", parsed);
-        import_core.summary.addRaw(`- AI Output did not pass requested format check logs for details.`);
+        import_core.summary.addRaw(`- AI Output did not pass requested format check logs for details.
+`);
         continue;
       }
     } catch (error) {
       console.error("Error parsing AI Output:", error);
-      import_core.summary.addRaw(`- Error parsing AI response: ${error instanceof Error ? error.message : "Unknown error"}`);
+      import_core.summary.addRaw(`- Error parsing AI response: ${error instanceof Error ? error.message : "Unknown error"}
+`);
       continue;
     }
   }
   console.log(`Total parsed similar issues from AI: ${parsedOutputs.length}`);
-  import_core.summary.addRaw(`- Total Parsed Similar Issues from AI: ${parsedOutputs.length}`);
+  import_core.summary.addRaw(`- Total Parsed Similar Issues from AI: ${parsedOutputs.length}
+`);
   if (parsedOutputs.length === 0) {
     console.log("No similar issues identified by AI.");
-    import_core.summary.addRaw(`- No similar issues identified by AI.`);
+    import_core.summary.addRaw(`- No similar issues identified by AI.
+`);
     import_core.summary.write();
     return;
   }
@@ -28656,9 +28676,11 @@ var main = async () => {
       body: commentBody
     });
     if (commentSuccess) {
-      import_core.summary.addRaw(`- Comment posted successfully.`);
+      import_core.summary.addRaw(`- Comment posted successfully.
+`);
     } else {
-      import_core.summary.addRaw(`- Failed to post comment.`);
+      import_core.summary.addRaw(`- Failed to post comment.
+`);
     }
   }
   if (labels.length > 0) {
@@ -28670,13 +28692,16 @@ var main = async () => {
       labels
     });
     if (addLabelsSuccess) {
-      import_core.summary.addRaw(`- Labels added: ${labels.join(", ")}`);
+      import_core.summary.addRaw(`- Labels added: ${labels.join(", ")}
+`);
     } else {
-      import_core.summary.addRaw(`- Failed to add labels: ${labels.join(", ")}`);
+      import_core.summary.addRaw(`- Failed to add labels: ${labels.join(", ")}
+`);
     }
   }
   console.log("Action completed successfully.");
-  import_core.summary.addRaw(`- Action completed successfully.`);
+  import_core.summary.addRaw(`- Action completed successfully.
+`);
   import_core.summary.write();
   return;
 };
