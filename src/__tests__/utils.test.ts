@@ -7,6 +7,7 @@ import {
   verifyIssueStateInput,
   processDateInput,
   chunk,
+  buildCommentBody,
 } from "../utils";
 import type { Issue, ParsedOutput } from "../types";
 
@@ -199,5 +200,85 @@ describe("chunk", () => {
   it("should handle size larger than array length", () => {
     const arr = [1, 2, 3];
     expect(chunk(arr, 5)).toEqual([[1, 2, 3]]);
+  });
+});
+
+describe("buildCommentBody", () => {
+  it("should build a comment body with outputs and issues to compare", () => {
+    const outputs: ParsedOutput[] = [
+      { issue: 1, likelihood: "high", reason: "Similar issue" },
+      { issue: 2, likelihood: "medium", reason: "Some overlap" },
+    ];
+    const issuesToCompare: Issue[] = [
+      {
+        number: 1,
+        state: "open",
+        title: "Issue One",
+        body: "Description of issue one",
+        createdAt: "",
+        updatedAt: "",
+      },
+      {
+        number: 2,
+        state: "closed",
+        title: "Issue Two",
+        body: "Description of issue two",
+        createdAt: "",
+        updatedAt: "",
+      },
+    ];
+
+    const expectedBody = `## ⚠️ Potential Duplicate/Semantically Similar Issues Identified
+The following issues may be duplicates or semantically similar to the current issue. Please review them:
+
+**Issue** #1: **high**
+**Title:** Issue One
+**State:** open
+**Reason:** Similar issue
+
+**Issue** #2: **medium**
+**Title:** Issue Two
+**State:** closed
+**Reason:** Some overlap
+`;
+
+    const result = buildCommentBody(outputs, issuesToCompare);
+    expect(result).toBe(expectedBody);
+  });
+
+  it("should return 'No similar issues found.' when outputs are empty", () => {
+    const outputs: ParsedOutput[] = [];
+    const issuesToCompare: Issue[] = [];
+
+    const expectedBody = "No similar issues found.";
+    const result = buildCommentBody(outputs, issuesToCompare);
+
+    expect(result).toBe(expectedBody);
+  });
+
+  it("should handle cases with missing issue details", () => {
+    const outputs: ParsedOutput[] = [{ issue: 3, likelihood: "low" }];
+    const issuesToCompare: Issue[] = [
+      {
+        number: 3,
+        state: "open",
+        title: "",
+        body: "",
+        createdAt: "",
+        updatedAt: "",
+      },
+    ];
+
+    const expectedBody = `## ⚠️ Potential Duplicate/Semantically Similar Issues Identified
+The following issues may be duplicates or semantically similar to the current issue. Please review them:
+
+**Issue** #3: **low**
+**Title:** N/A
+**State:** open
+**Reason:** N/A
+`;
+
+    const result = buildCommentBody(outputs, issuesToCompare);
+    expect(result).toBe(expectedBody);
   });
 });

@@ -86,7 +86,7 @@ Advanced configuration:
 | `model` | yes | — | Model identifier. |
 | `owner` | no | inferred | Repo owner (defaults to event context). |
 | `repo_name` | no | inferred | Repository name (defaults to event context). |
-| `batch_size` | no | 50 | Issues per AI request (1–100). |
+| `batch_size` | no | 10 | Issues per AI request (1–100). |
 | `issue_state_filter` | no | open | Candidate issue state filter (`open\|closed\|all`). |
 | `time_filter` | no | — | ISO date (`YYYY-MM-DD`). Only issues updated since this date are considered. |
 | `max_tokens` | no | 200 | Max tokens per completion response. |
@@ -124,10 +124,12 @@ The following issues may be duplicates or semantically similar to the current is
 
 **Issue** #123: **high**
 **Title:** Example auth timeout
+**State:** open
 **Reason:** Both describe token refresh failing during login.
 
 **Issue** #145: **medium**
 **Title:** Sporadic 401 errors
+**State:** closed
 **Reason:** Overlapping description of session expiration handling.
 ```
 

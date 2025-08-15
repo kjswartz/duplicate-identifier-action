@@ -9,6 +9,7 @@ import {
   systemPromptMsg,
   buildCurrentIssueSummary,
   verifyJsonResponse,
+  buildCommentBody,
 } from "./utils";
 import { aiInference } from "./ai";
 import type { ParsedOutput } from "./types";
@@ -190,21 +191,10 @@ const main = async () => {
     summary.write();
     return;
   }
-  // -------- Create Comment ---------------------------------------
-  const commentLines = [
-    "## ⚠️ Potential Duplicate/Semantically Similar Issues Identified",
-    "The following issues may be duplicates or semantically similar to the current issue. Please review them:",
-    "",
-  ];
 
-  for (const output of parsedOutputs) {
-    const issue = issuesToCompare.find(({ number }) => number == output.issue);
-    commentLines.push(`**Issue** #${output.issue}: **${output.likelihood}**`);
-    commentLines.push(`**Title:** ${issue?.title || "N/A"}`);
-    commentLines.push(`**Reason:** ${output?.reason || "N/A"}`);
-    commentLines.push("");
-  }
-  const commentBody = commentLines.join("\n");
+  // -------- Create Comment ---------------------------------------
+  const commentBody = buildCommentBody(parsedOutputs, issuesToCompare);
+
   summary.addHeading("Comment & Labels Summary");
   summary.addRaw(commentBody);
 

@@ -24801,6 +24801,26 @@ var verifyJsonResponse = (data) => {
   }
   return true;
 };
+var buildCommentBody = (outputs, issuesToCompare) => {
+  if (outputs.length === 0) {
+    return "No similar issues found.";
+  }
+  const commentLines = [
+    "## ⚠️ Potential Duplicate/Semantically Similar Issues Identified",
+    "The following issues may be duplicates or semantically similar to the current issue. Please review them:",
+    ""
+  ];
+  for (const output of outputs) {
+    const issue = issuesToCompare.find(({ number }) => number === output.issue);
+    commentLines.push(`**Issue** #${output.issue}: **${output.likelihood}**`);
+    commentLines.push(`**Title:** ${issue?.title || "N/A"}`);
+    commentLines.push(`**State:** ${issue?.state || "N/A"}`);
+    commentLines.push(`**Reason:** ${output?.reason || "N/A"}`);
+    commentLines.push("");
+  }
+  return commentLines.join(`
+`);
+};
 
 // src/ai.ts
 var core = __toESM(require_core(), 1);
@@ -28650,20 +28670,7 @@ var main = async () => {
     import_core.summary.write();
     return;
   }
-  const commentLines = [
-    "## ⚠️ Potential Duplicate/Semantically Similar Issues Identified",
-    "The following issues may be duplicates or semantically similar to the current issue. Please review them:",
-    ""
-  ];
-  for (const output of parsedOutputs) {
-    const issue = issuesToCompare.find(({ number }) => number == output.issue);
-    commentLines.push(`**Issue** #${output.issue}: **${output.likelihood}**`);
-    commentLines.push(`**Title:** ${issue?.title || "N/A"}`);
-    commentLines.push(`**Reason:** ${output?.reason || "N/A"}`);
-    commentLines.push("");
-  }
-  const commentBody = commentLines.join(`
-`);
+  const commentBody = buildCommentBody(parsedOutputs, issuesToCompare);
   import_core.summary.addHeading("Comment & Labels Summary");
   import_core.summary.addRaw(commentBody);
   if (postComment) {

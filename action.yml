@@ -9,7 +9,7 @@ inputs:
   batch_size:
     description: 'The number of issues to check in a single batch. Any number 1-100 is valid. Defaults to 50.'
     required: false
-    default: '50'
+    default: '10'
   endpoint:
     description: 'The endpoint to use. Defaults to "https://models.github.ai/inference"'
     required: false

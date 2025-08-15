@@ -70,3 +70,29 @@ export const verifyJsonResponse = (data: unknown): data is ParsedOutput[] => {
   }
   return true;
 };
+
+export const buildCommentBody = (
+  outputs: ParsedOutput[],
+  issuesToCompare: Issue[],
+): string => {
+  if (outputs.length === 0) {
+    return "No similar issues found.";
+  }
+
+  const commentLines = [
+    "## ⚠️ Potential Duplicate/Semantically Similar Issues Identified",
+    "The following issues may be duplicates or semantically similar to the current issue. Please review them:",
+    "",
+  ];
+
+  for (const output of outputs) {
+    const issue = issuesToCompare.find(({ number }) => number === output.issue);
+    commentLines.push(`**Issue** #${output.issue}: **${output.likelihood}**`);
+    commentLines.push(`**Title:** ${issue?.title || "N/A"}`);
+    commentLines.push(`**State:** ${issue?.state || "N/A"}`);
+    commentLines.push(`**Reason:** ${output?.reason || "N/A"}`);
+    commentLines.push("");
+  }
+
+  return commentLines.join("\n");
+};
