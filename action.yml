@@ -1,0 +1,58 @@
+name: 'AI Duplicate Identifier Action'
+description: 'An action that uses AI to identify duplicate issues.'
+
+branding:
+  icon: 'message-square'
+  color: orange
+
+inputs:
+  batch_size:
+    description: 'The number of issues to check in a single batch. Any number 1-100 is valid. Defaults to 50.'
+    required: false
+    default: '50'
+  endpoint:
+    description: 'The endpoint to use. Defaults to "https://models.github.ai/inference"'
+    required: false
+    default: 'https://models.github.ai/inference'
+  issue_body:
+    description: The body of the issue to check for duplicates
+    required: true
+  issue_number:
+    description: The issue number to check for duplicates
+    required: true
+  issue_state:
+    description: 'The state of the issues to check (open, closed, all). Defaults to open.'
+    required: false
+    default: 'open'
+  issue_title:
+    description: The title of the issue to check for duplicates
+    required: true
+  labels:
+    description: 'The labels to apply to the issue if duplicates are found, separated by commas e.g.: "duplicate,needs-triage"'
+    required: false
+  max_tokens:
+    description: The maximum number of tokens to generate. Defaults to 200.
+    required: false
+    default: '200'
+  model:
+    description: The model to use for AI generation (e.g. opeanai/gpt-4.1).
+    required: true
+  owner:
+    description: The owner of the repository. Will be inferred from the GitHub context if not provided.
+    required: false
+  post_comment:
+    description: 'Whether to post a comment on the issue if duplicates are found. Defaults to true.'
+    required: false
+    default: 'true'
+  repo_name:
+    description: The name of the repository. Will be inferred from the GitHub context if not provided.
+    required: false
+  time_filter:
+    description: 'Filter issues created after this time (Format: "YYYY-MM-DD").'
+    required: false
+  token:
+    description: The token to use
+    required: true
+runs:
+  using: node20
+  main: dist/index.js
