@@ -29,7 +29,7 @@ interface GetIssuesParams {
   owner: string;
   repo: string;
   issueNumber: number;
-  issueState: "all" | "open" | "closed";
+  issueStateFilter: "all" | "open" | "closed";
   timeFilter?: string;
 }
 

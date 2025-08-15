@@ -10,7 +10,7 @@ export const getIssuesToCompare: GetIssuesFn = async ({
   owner,
   repo,
   issueNumber,
-  issueState,
+  issueStateFilter,
   timeFilter,
 }) => {
   const collected: Issue[] = [];
@@ -19,7 +19,7 @@ export const getIssuesToCompare: GetIssuesFn = async ({
   const optionsBase = {
     owner,
     repo,
-    state: issueState,
+    state: issueStateFilter,
     per_page,
     ...(timeFilter ? { since: timeFilter } : {}),
   };

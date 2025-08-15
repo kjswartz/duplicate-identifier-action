@@ -46,7 +46,9 @@ const main = async () => {
     throw new Error("batch_size must be between 1 and 100");
   }
 
-  const issueState = verifyIssueStateInput(getInput("issue_state"));
+  const issueStateFilter = verifyIssueStateInput(
+    getInput("issue_state_filter"),
+  );
   const postComment = getInput("post_comment") === "true";
   const timeFilterInput = getInput("time_filter");
   const timeFilter = timeFilterInput
@@ -62,7 +64,7 @@ const main = async () => {
   summary.addRaw(`- Owner: ${owner}`);
   summary.addRaw(`- Repo: ${repo}`);
   summary.addRaw(`- Issue Number: ${issueNumber}`);
-  summary.addRaw(`- Issue State Filter: ${issueState}`);
+  summary.addRaw(`- Issue State Filter: ${issueStateFilter}`);
   summary.addRaw(`- Time Filter: ${timeFilter || "None"}`);
   summary.addRaw(
     `- Labels to Add: ${labels.length > 0 ? labels.join(", ") : "None"}`,
@@ -82,7 +84,7 @@ const main = async () => {
     owner,
     repo,
     issueNumber,
-    issueState,
+    issueStateFilter,
     timeFilter,
   });
 

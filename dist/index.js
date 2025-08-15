@@ -24655,7 +24655,7 @@ var getIssuesToCompare = async ({
   owner,
   repo,
   issueNumber,
-  issueState,
+  issueStateFilter,
   timeFilter
 }) => {
   const collected = [];
@@ -24664,7 +24664,7 @@ var getIssuesToCompare = async ({
   const optionsBase = {
     owner,
     repo,
-    state: issueState,
+    state: issueStateFilter,
     per_page,
     ...timeFilter ? { since: timeFilter } : {}
   };
@@ -28539,7 +28539,7 @@ var main = async () => {
   if (batchSize <= 0 || batchSize > 100) {
     throw new Error("batch_size must be between 1 and 100");
   }
-  const issueState = verifyIssueStateInput(import_core.getInput("issue_state"));
+  const issueStateFilter = verifyIssueStateInput(import_core.getInput("issue_state_filter"));
   const postComment = import_core.getInput("post_comment") === "true";
   const timeFilterInput = import_core.getInput("time_filter");
   const timeFilter = timeFilterInput ? processDateInput(timeFilterInput) : undefined;
@@ -28549,7 +28549,7 @@ var main = async () => {
   import_core.summary.addRaw(`- Owner: ${owner}`);
   import_core.summary.addRaw(`- Repo: ${repo}`);
   import_core.summary.addRaw(`- Issue Number: ${issueNumber}`);
-  import_core.summary.addRaw(`- Issue State Filter: ${issueState}`);
+  import_core.summary.addRaw(`- Issue State Filter: ${issueStateFilter}`);
   import_core.summary.addRaw(`- Time Filter: ${timeFilter || "None"}`);
   import_core.summary.addRaw(`- Labels to Add: ${labels.length > 0 ? labels.join(", ") : "None"}`);
   import_core.summary.addRaw(`- AI Endpoint: ${endpoint}`);
@@ -28564,7 +28564,7 @@ var main = async () => {
     owner,
     repo,
     issueNumber,
-    issueState,
+    issueStateFilter,
     timeFilter
   });
   console.log(`Issues fetch complete.`);

@@ -67,7 +67,7 @@ Advanced configuration:
     owner: ${{ github.repository_owner }}          # optional; inferred by default
     repo_name: ${{ github.event.repository.name }} # optional; inferred by default
     batch_size: 40
-    issue_state: all              # open | closed | all
+    issue_state_filter: all              # open | closed | all
     time_filter: "2025-01-01"     # only issues created since this ISO date
     model: "opeanai/gpt-4.1-mini" # must exist for your endpoint
     max_tokens: 500               # per completion
@@ -87,7 +87,7 @@ Advanced configuration:
 | `owner` | no | inferred | Repo owner (defaults to event context). |
 | `repo_name` | no | inferred | Repository name (defaults to event context). |
 | `batch_size` | no | 50 | Issues per AI request (1–100). |
-| `issue_state` | no | open | Candidate issue state filter (`open\|closed\|all`). |
+| `issue_state_filter` | no | open | Candidate issue state filter (`open\|closed\|all`). |
 | `time_filter` | no | — | ISO date (`YYYY-MM-DD`). Only issues updated since this date are considered. |
 | `max_tokens` | no | 200 | Max tokens per completion response. |
 | `endpoint` | no | `https://models.github.ai/inference` | AI inference base URL. |

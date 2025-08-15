@@ -20,13 +20,13 @@ inputs:
   issue_number:
     description: The issue number to check for duplicates
     required: true
-  issue_state:
-    description: 'The state of the issues to check (open, closed, all). Defaults to open.'
-    required: false
-    default: 'open'
   issue_title:
     description: The title of the issue to check for duplicates
     required: true
+  issue_state_filter:
+    description: 'Filter the state of the issues to check (open, closed, all). Defaults to open.'
+    required: false
+    default: 'open'
   labels:
     description: 'The labels to apply to the issue if duplicates are found, separated by commas e.g.: "duplicate,needs-triage"'
     required: false
